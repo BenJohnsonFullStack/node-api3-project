@@ -23,7 +23,14 @@ async function validateUserId(req, res, next) {
 }
 
 function validateUser(req, res, next) {
-  console.log("validateUser middleware");
+  const { name } = req.body;
+  if (!name || !name.trim()) {
+    next({ status: 400, message: "missing required name field" });
+  } else {
+    req.name = name.trim();
+    next();
+  }
+
   // DO YOUR MAGIC
   next();
 }
