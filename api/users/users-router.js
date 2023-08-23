@@ -60,20 +60,24 @@ router.delete("/:id", validateUserId, async (req, res, next) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
   const { id } = req.params;
-  const deletedUser = await User.getById(id);
   try {
-    const recordsUpdated = await User.remove(id);
-    if (recordsUpdated) {
-      res.status(200).json(deletedUser);
-    }
+    await User.remove(id);
+    res.status(200).json(req.user);
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:id/posts", validateUserId, (req, res) => {
+router.get("/:id/posts", validateUserId, async (req, res, next) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  const { id } = req.params;
+  try {
+    const userPosts = await User.getUserPosts(id);
+    res.status(200).json(userPosts);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post("/:id/posts", validateUserId, (req, res) => {
