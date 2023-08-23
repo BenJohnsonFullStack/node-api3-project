@@ -92,7 +92,7 @@ router.post(
     const { id } = req.params;
     try {
       const userPost = await Post.insert({ user_id: id, text: post });
-      res.status(200).json(userPost);
+      res.status(201).json(userPost);
     } catch (err) {
       next(err);
     }
